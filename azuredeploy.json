@@ -12,7 +12,7 @@
   },
   "resources": [
     {
-      "apiVersion": "2021-11-01-preview",
+      "apiVersion": "2023-01-01",
       "type": "Microsoft.Storage/storageAccounts",
       "name": "[concat('datalakest', uniqueString(resourceGroup().id))]",
       "location": "[parameters('location')]",
@@ -23,7 +23,7 @@
       "kind": "StorageV2"
     },
     {
-      "apiVersion": "2021-11-01-preview",
+      "apiVersion": "2023-01-01",
       "type": "Microsoft.Storage/storageAccounts/blobServices",
       "name": "[concat('datalakest', uniqueString(resourceGroup().id), '/default')]",
       "dependsOn": [
@@ -36,7 +36,7 @@
       }
     },
     {
-      "apiVersion": "2019-06-01-preview",
+      "apiVersion": "2016-11-01",
       "type": "Microsoft.DataLakeStore/accounts",
       "name": "[concat('adls', uniqueString(resourceGroup().id))]",
       "location": "[parameters('location')]",
