@@ -3,8 +3,7 @@
   "contentVersion": "1.0.0.0",
   "parameters": {},
   "variables": {
-    "synapseWorkspaceName": "EnapARMtemplate",
-    "synapseSku": "Standard" // Or "Premium"
+    "synapseWorkspaceName": "YOUR_SYNAPSE_WORKSPACE_NAME"
   },
   "resources": [
     {
@@ -19,17 +18,8 @@
       "name": "[variables('synapseWorkspaceName')]",
       "type": "Microsoft.Synapse/workspaces",
       "location": "eastus2",
-      "sku": {
-        "name": "[variables('synapseSku')]"
-      },
       "properties": {
-        // Optional properties can be added here, such as:
-        // "managedVirtualNetwork": {
-        //   "type": "Managed"
-        // },
-        // "virtualNetworkProfile": {
-        //   "subnetId": "YOUR_SUBNET_ID"
-        // }
+        // Optional properties can be added here
       },
       "resources": [],
       "dependsOn": [
