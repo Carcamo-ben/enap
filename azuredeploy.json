@@ -47,14 +47,14 @@
         "type": "SystemAssigned"
       },
       "dependsOn": [
-        "[resourceId('Microsoft.Storage/storageAccounts', concat('adls', uniqueString(resourceGroup().id)))]"
+        "[resourceId('Microsoft.Storage/storageAccounts', concat('datalakest', uniqueString(resourceGroup().id)))]"
       ],
       "properties": {
         "defaultDataLakeStorage": {
           "accountUrl": "[concat('https://', reference(concat('Microsoft.Storage/storageAccounts/', concat('datalakest', uniqueString(resourceGroup().id))), '2019-06-01').primaryEndpoints.blob)]",
           "createManagedPrivateEndpoint": false,
-          "filesystem": "[concat('adls', uniqueString(resourceGroup().id))]",
-          "resourceId": "[resourceId('Microsoft.Storage/storageAccounts', concat('adls', uniqueString(resourceGroup().id)))]"
+          "filesystem": "[concat('datalakest', uniqueString(resourceGroup().id))]",
+          "resourceId": "[resourceId('Microsoft.Storage/storageAccounts', concat('datalakest', uniqueString(resourceGroup().id)))]"
         }
       },
       "resources": []
