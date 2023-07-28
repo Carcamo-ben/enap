@@ -46,21 +46,7 @@
       "identity": {
         "type": "SystemAssigned"
       },
-      "properties": {},
-      "resources": [
-        {
-          "type": "firewallRules",
-          "apiVersion": "2019-06-01-preview",
-          "name": "AllowAllWindowsAzureIps",
-          "properties": {
-            "startIpAddress": "0.0.0.0",
-            "endIpAddress": "0.0.0.0"
-          },
-          "dependsOn": [
-            "[resourceId('Microsoft.DataLakeStore/accounts', concat('adls', uniqueString(resourceGroup().id),'/*'))]"
-          ]
-        }
-      ]
+      "properties": {}
     },
     {
       "apiVersion": "2023-05-01",
