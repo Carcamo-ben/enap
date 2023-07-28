@@ -8,21 +8,13 @@
   "resources": [
     {
       "apiVersion": "2022-06-01",
-      "type": "Microsoft.Resources/resourceGroups",
-      "name": "synapsearmtrial",
-      "location": "eastus2",
-      "properties": {}
-    },
-    {
-      "apiVersion": "2022-06-01",
       "name": "[variables('synapseWorkspaceName')]",
       "type": "Microsoft.Synapse/workspaces",
       "location": "eastus2",
       "properties": {
         // Optional properties can be added here
       },
-      "resources": [],
-      "dependsOn": [ "[resourceId('Microsoft.Resources/resourceGroups', 'synapsearmtrial')]" ]
+      "resources": []
     }
   ],
   "outputs": {
