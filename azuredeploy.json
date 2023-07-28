@@ -20,7 +20,10 @@
         "name": "Standard_LRS",
         "tier": "Standard"
       },
-      "kind": "StorageV2"
+      "kind": "StorageV2",
+      "properties": {
+        "isHnsEnabled": "true"
+      }
     },
     {
       "apiVersion": "2023-01-01",
@@ -36,19 +39,6 @@
       }
     },
     {
-      "apiVersion": "2016-11-01",
-      "type": "Microsoft.DataLakeStore/accounts",
-      "name": "[concat('adls', uniqueString(resourceGroup().id))]",
-      "location": "[parameters('location')]",
-      "sku": {
-        "name": "standard"
-      },
-      "identity": {
-        "type": "SystemAssigned"
-      },
-      "properties": {}
-    },
-    {
       "apiVersion": "2023-05-01",
       "type": "Microsoft.Synapse/workspaces",
       "name": "[variables('synapseWorkspaceName')]",
@@ -57,14 +47,14 @@
         "type": "SystemAssigned"
       },
       "dependsOn": [
-        "[resourceId('Microsoft.DataLakeStore/accounts', concat('adls', uniqueString(resourceGroup().id)))]"
+        "[resourceId('Microsoft.Storage/storageAccounts', concat('adls', uniqueString(resourceGroup().id)))]"
       ],
       "properties": {
         "defaultDataLakeStorage": {
           "accountUrl": "[concat('https://', reference(concat('Microsoft.Storage/storageAccounts/', concat('datalakest', uniqueString(resourceGroup().id))), '2019-06-01').primaryEndpoints.blob)]",
           "createManagedPrivateEndpoint": false,
           "filesystem": "[concat('adls', uniqueString(resourceGroup().id))]",
-          "resourceId": "[resourceId('Microsoft.DataLakeStore/accounts', concat('adls', uniqueString(resourceGroup().id)))]"
+          "resourceId": "[resourceId('Microsoft.Storage/storageAccounts', concat('adls', uniqueString(resourceGroup().id)))]"
         }
       },
       "resources": []
