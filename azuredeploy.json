@@ -51,7 +51,7 @@
       ],
       "properties": {
         "defaultDataLakeStorage": {
-          "accountUrl": "[concat('https://', reference(concat('Microsoft.Storage/storageAccounts/', concat('datalakest', uniqueString(resourceGroup().id))), '2019-06-01').primaryEndpoints.blob)]",
+          "accountUrl": "[concat('https://','datalakest', uniqueString(resourceGroup().id),'dfs.core.windows.net')]",
           "createManagedPrivateEndpoint": false,
           "filesystem": "[concat('datalakest', uniqueString(resourceGroup().id))]",
           "resourceId": "[resourceId('Microsoft.Storage/storageAccounts', concat('datalakest', uniqueString(resourceGroup().id)))]"
