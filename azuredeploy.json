@@ -22,9 +22,7 @@
         // Optional properties can be added here
       },
       "resources": [],
-      "dependsOn": [
-        "synapsearmtrial"
-      ]
+      "dependsOn": [ "[resourceId('Microsoft.Resources/resourceGroups', 'synapsearmtrial')]" ]
     }
   ],
   "outputs": {
