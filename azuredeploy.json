@@ -2,82 +2,87 @@
   "$schema": "https://schema.management.azure.com/schemas/2019-04-01/deploymentTemplate.json#",
   "contentVersion": "1.0.0.0",
   "parameters": {
-    "location": "eastus2"
+    "location": {
+      "type": "string",
+      "defaultValue": "eastus2"
+    }
   },
   "variables": {
     "synapseWorkspaceName": "enaparmtrial"
   },
-    "resources": [
-      {
-        "apiVersion": "2021-11-01-preview",
-        "type": "Microsoft.Storage/storageAccounts",
-        "name": "[concat('datalakest', uniqueString(resourceGroup().id))]",
-        "location": "[parameters('location')]",
-        "sku": {
-          "name": "Standard_LRS",
-          "tier": "Standard"
-        },
-        "kind": "StorageV2"
+  "resources": [
+    {
+      "apiVersion": "2021-11-01-preview",
+      "type": "Microsoft.Storage/storageAccounts",
+      "name": "[concat('datalakest', uniqueString(resourceGroup().id))]",
+      "location": "[parameters('location')]",
+      "sku": {
+        "name": "Standard_LRS",
+        "tier": "Standard"
       },
-      {
-        "apiVersion": "2021-11-01-preview",
-        "type": "Microsoft.Storage/storageAccounts/blobServices",
-        "name": "[concat('datalakest', uniqueString(resourceGroup().id)), '/default']",
-        "dependsOn": [ "[resourceId('Microsoft.Storage/storageAccounts', concat('datalakest', uniqueString(resourceGroup().id)))]" ],
-        "properties": {
-          "cors": {
-            "corsRules": []
+      "kind": "StorageV2"
+    },
+    {
+      "apiVersion": "2021-11-01-preview",
+      "type": "Microsoft.Storage/storageAccounts/blobServices",
+      "name": "[concat('datalakest', uniqueString(resourceGroup().id)), '/default']",
+      "dependsOn": [
+        "[resourceId('Microsoft.Storage/storageAccounts', concat('datalakest', uniqueString(resourceGroup().id)))]"
+      ],
+      "properties": {
+        "cors": {
+          "corsRules": []
+        }
+      }
+    },
+    {
+      "apiVersion": "2019-06-01-preview",
+      "type": "Microsoft.DataLakeStore/accounts",
+      "name": "[concat('adls', uniqueString(resourceGroup().id))]",
+      "location": "[parameters('location')]",
+      "sku": {
+        "name": "standard"
+      },
+      "identity": {
+        "type": "SystemAssigned"
+      },
+      "properties": {},
+      "resources": [
+        {
+          "type": "firewallRules",
+          "apiVersion": "2019-06-01-preview",
+          "name": "AllowAllWindowsAzureIps",
+          "properties": {
+            "startIpAddress": "0.0.0.0",
+            "endIpAddress": "0.0.0.0"
           }
         }
+      ]
+    },
+    {
+      "apiVersion": "2023-05-01",
+      "type": "Microsoft.Synapse/workspaces",
+      "name": "[variables('synapseWorkspaceName')]",
+      "location": "[parameters('location')]",
+      "identity": {
+        "type": "SystemAssigned"
       },
-      {
-        "apiVersion": "2019-06-01-preview",
-        "type": "Microsoft.DataLakeStore/accounts",
-        "name": "[concat('adls',uniqueString(resourceGroup().id))]",
-        "location": "[parameters('location')]",
-        "sku": {
-          "name": "standard"
-        },
-        "identity": {
-          "type": "SystemAssigned"
-        },
-        "properties": {},
-        "resources": [
-          {
-            "type": "firewallRules",
-            "apiVersion": "2019-06-01-preview",
-            "name": "AllowAllWindowsAzureIps",
-            "properties": {
-              "startIpAddress": "0.0.0.0",
-              "endIpAddress": "0.0.0.0"
-            }
-          }
-        ]
+      "defaultDataLakeStorage": {
+        "accountUrl": "[concat('https://', reference(concat('Microsoft.Storage/storageAccounts/', concat('datalakest', uniqueString(resourceGroup().id))), '2019-06-01').primaryEndpoints.blob)]",
+        "createManagedPrivateEndpoint": false,
+        "filesystem": "[concat('adls', uniqueString(resourceGroup().id))]",
+        "resourceId": "[resourceId('Microsoft.DataLakeStore/accounts', concat('adls', uniqueString(resourceGroup().id)))]"
       },
-      {
-        "apiVersion": "2023-05-01",
-        "type": "Microsoft.Synapse/workspaces",
-        "name": "[variables('synapseWorkspaceName')]",
-        "location": "[parameters('location')]",
-        "identity": {
-          "type": "SystemAssigned"
-        },
-        "defaultDataLakeStorage": {
-          "accountUrl": "[concat('https://','adls',uniqueString(resourceGroup().id),'.dfs.core.windows.net/')]",
-          "createManagedPrivateEndpoint": "false",
-          "filesystem": "[concat('adls',uniqueString(resourceGroup().id))]",
-          "resourceId": "[resourceId('Microsoft.DataLakeStore/accounts', concat('adls',uniqueString(resourceGroup().id)))]"
-        },
-        "dependsOn": [
-          "[resourceId('Microsoft.DataLakeStore/accounts', concat('adls',uniqueString(resourceGroup().id)))]"
-        ],
-        "properties": {
-          // Optional properties can be added here
-        },
-
-        "resources": []
-      }
-    ],
+      "dependsOn": [
+        "[resourceId('Microsoft.Storage/storageAccounts', concat('datalakest', uniqueString(resourceGroup().id)))]",
+        "[resourceId('Microsoft.DataLakeStore/accounts', concat('adls', uniqueString(resourceGroup().id)))]"
+      ],
+      "properties": {
+        // Optional properties can be added here
+      },
+      "resources": []
+    }
+  ],
   "outputs": {
     "workspaceId": {
       "type": "string",
